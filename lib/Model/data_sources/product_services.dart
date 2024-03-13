@@ -8,4 +8,13 @@ class ProductServices {
       method: ApiEndPoints.productEndPoint,
     );
   }
+
+  Future<Response> getProductDetails({
+    required Map<String, dynamic> query,
+  }) async {
+    return await DioHelper.getData(
+      method: '${ApiEndPoints.productEndPoint}${query['']}',
+      query: query,
+    );
+  }
 }

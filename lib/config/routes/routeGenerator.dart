@@ -11,13 +11,13 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      
       case AppRoutes.detailsScreen:
-        if (args is List<String>) {
+        if (args is List<dynamic>) {
           return DefaultPageRouteBuilder.animatedScaleRoute(
             screen: DetailsScreen(
               id: args[0],
-              description:args[1],
+              description: args[1],
+              cubit: args[2],
             ),
           );
         }

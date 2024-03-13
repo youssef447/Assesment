@@ -3,12 +3,14 @@ import 'package:assesment_app/config/extensions/extensions.dart';
 import 'package:assesment_app/config/services/dio_helper.dart';
 import 'package:assesment_app/core/style/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'config/dependencies/injection.dart';
 import 'config/routes/routeGenerator.dart';
 import 'config/routes/routes.dart';
 import 'view/home_page/home.dart';
+import 'view_model/prdouct_cubit.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,13 +36,16 @@ class MyApp extends StatelessWidget {
             (fontSize, instance) =>
                 FontSizeResolvers.height(fontSize, instance),
         builder: (context, _) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter App',
-            theme: AppTheme.darkTheme,
-            home: const HomeScreen(),
-            onGenerateRoute: RouteGenerator.onGenerateRoute,
-            initialRoute: AppRoutes.homeScreen,
+          return BlocProvider(
+            create: (context) => ProductCubit()..getProducts(),
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter App',
+              theme: AppTheme.darkTheme,
+              home: const HomeScreen(),
+              onGenerateRoute: RouteGenerator.onGenerateRoute,
+              initialRoute: AppRoutes.homeScreen,
+            ),
           );
         });
   }

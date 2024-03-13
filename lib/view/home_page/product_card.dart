@@ -2,15 +2,18 @@ part of 'home.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel model;
-  const ProductCard({super.key, required this.model});
+  final ProductCubit cubit;
+  const ProductCard({super.key, required this.model, required this.cubit});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goTo(
-            route: AppRoutes.detailsScreen,
-            args: [model.id.toString(), model.brand.brandDescription]);
+        context.goTo(route: AppRoutes.detailsScreen, args: [
+          model.id.toString(),
+          model.brand.brandDescription,
+          cubit,
+        ]);
       },
       child: GradiantContainer(
         padding:

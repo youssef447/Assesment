@@ -22,61 +22,62 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: BlocProvider(
-        create: (context) => ProductCubit()..getProducts(),
-        child: BlocConsumer<ProductCubit, ProductStates>(
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Slash',
-                    style: context.textTheme.titleLarge!
-                        .copyWith(letterSpacing: 2),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                    child: state is ProductSuccessState
-                        ? state.model.isNotEmpty
-                            ? GridView.builder(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 15.h,
-                                  childAspectRatio: 2 / 3,
-                                  crossAxisSpacing: 10.w,
+          child: BlocConsumer<ProductCubit, ProductStates>(
+        builder: (context, state) {
+          final cubit = ProductCubit.get(context);
+          return Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Slash',
+                  style:
+                      context.textTheme.titleLarge!.copyWith(letterSpacing: 2),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: state is ProductLoadingState
+                      ? const ShimmerLoading()
+                      : state is ProductErrorState
+                          ? Center(
+                              child: Text(
+                                'error ${state.errMessage}',
+                                style: context.textTheme.titleMedium,
+                              ),
+                            )
+                          : cubit.model.isNotEmpty
+                              ? GridView.builder(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 15.h,
+                                    childAspectRatio: 2 / 3,
+                                    crossAxisSpacing: 10.w,
+                                  ),
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: cubit.model.length,
+                                  itemBuilder: (context, index) {
+                                    return ProductCard(
+                                      model: cubit.model[index],
+                                      cubit: cubit,
+                                    );
+                                  },
+                                )
+                              : Center(
+                                  child: Text(
+                                    'No Data',
+                                    style: context.textTheme.titleLarge,
+                                  ),
                                 ),
-                                scrollDirection: Axis.vertical,
-                                itemCount: state.model.length,
-                                itemBuilder: (context, index) {
-                                  return ProductCard(model: state.model[index]);
-                                },
-                              )
-                            : Center(
-                                child: Text(
-                                  'No Data',
-                                  style: context.textTheme.titleLarge,
-                                ),
-                              )
-                        : state is ProductErrorState
-                            ? Center(
-                                child: Text(
-                                  'error ${state.errMessage}',
-                                  style: context.textTheme.titleMedium,
-                                ),
-                              )
-                            : const ShimmerLoading(),
-                  )
-                ],
-              ),
-            );
-          },
-          listener: (BuildContext context, ProductStates state) {},
-        ),
+                )
+              ],
+            ),
+          );
+        },
+        listener: (BuildContext context, ProductStates state) {},
       )),
     );
   }

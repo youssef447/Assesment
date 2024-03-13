@@ -32,42 +32,8 @@ class ProductModel {
       variations: (json['ProductVariations'] as List<dynamic>)
           .map((e) => ProductVariationModel.fromJson(e))
           .toList(),
+      
     );
   }
 }
 
-class ProductDetailsModel {
-  late final int id, brandId;
-  late final String? productLogoUrl;
-  late final String name, description, brandName, brandImage;
-  late final int? rating;
-  late final List<ProductVariationModel> variations;
-
-  ProductDetailsModel({
-    required this.id,
-    required this.brandId,
-    required this.brandName,
-    required this.brandImage,
-    required this.name,
-    required this.description,
-    this.productLogoUrl,
-    this.rating,
-    required this.variations,
-  });
-
-  factory ProductDetailsModel.fromJson(Map<String, dynamic> json) {
-    return ProductDetailsModel(
-      id: json['id'],
-      brandImage: json['brandImage'],
-      brandName: json['brandName'],
-      brandId: json['brand_id'],
-      name: json['name'],
-      description: json['description'],
-      rating: json['product_rating'],
-      productLogoUrl: json['product_logo_url'],
-      variations: (json['variations'] as List<dynamic>)
-          .map((e) => ProductVariationModel.fromJson(e))
-          .toList(),
-    );
-  }
-}
